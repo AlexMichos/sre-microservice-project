@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 5s # Κάθε 5 δευτερόλεπτα θα μαζεύει metrics
+
+rule_files:
+  - "alerts.yml"
+
+scrape_configs:
+  - job_name: 'sre-demo-app'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['app:5000'] # Το όνομα του service όπως θα οριστεί στο docker-compose

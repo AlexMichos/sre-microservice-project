@@ -1,0 +1,11 @@
+groups:
+  - name: sre_app_alerts
+    rules:
+      - alert: HighErrorRate
+        expr: (sum(rate(flask_http_request_total{status="500"}[1m])) / sum(rate(flask_http_request_total[1m]))) * 100 > 5
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High Error Rate detected on SRE Microservice"
+          description: "Error rate is currently above 5%"

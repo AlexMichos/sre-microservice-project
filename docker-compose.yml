@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # 1. Η Python Εφαρμογή μας
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sre-demo-app
+    ports:
+      - "8080:5000"
+
+  # 2. Prometheus Server (Metrics Collector)
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alerts.yml:/etc/prometheus/alerts.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - app
+
+  # 3. Grafana (Dashboards & Visualization)
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
